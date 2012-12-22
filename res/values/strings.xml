@@ -13,4 +13,5 @@
     <string name="pref_intercept_category">Numbers to intercept</string>
     <string name="pref_global_category">Global</string>
     <string name="no_history">Search history is empty</string>
+    <string name="confirm_delete_title">Delete item from history?</string>
 </resources>

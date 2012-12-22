@@ -2,12 +2,15 @@ package net.droza.android.premiumratesaver.db;
 
 import net.droza.android.premiumratesaver.CallUtils;
 import net.droza.android.premiumratesaver.R;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +23,7 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 	private HistoryDBAdapter mDbHelper;
 	private Context ctx;
 	private int layout;
+	private static final String LOGTAG = HistoryCursorAdapter.class.toString();
 
 	public HistoryCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
@@ -56,15 +60,44 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 
 	@Override
     public void bindView(View view, Context context, Cursor cursor){
-        final int id = cursor.getInt(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID));
-        final String altNum = cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ALT_NUM));
-        final Context ctx = context;
+		final int itemId = cursor.getInt(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID));
+		final String desc = cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_DESCRIPTION));
+		final String altNum = cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ALT_NUM));
+		final Context ctx = context;
+		final Cursor c = cursor;
+
+		view.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				Log.v(LOGTAG, "Long Click! " + itemId);
+				AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+				builder.setMessage(desc + "\n" + altNum)
+			           .setTitle(R.string.confirm_delete_title);
+				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int buttonId) {
+			               Log.v(LOGTAG, "Deleting item from history: " + itemId);
+			               mDbHelper.deleteHistory(itemId);	
+			               c.requery();
+			               notifyDataSetChanged();
+			           }
+			       });
+				builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int buttonId) {
+			               Log.v(LOGTAG, "Negative");
+			           }
+			       });
+				AlertDialog dialog = builder.create();
+				dialog.show();
+				return true;
+			}
+		});
         
         Button btn = (Button)view.findViewById(R.id.history_call);
         btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Log.v("NUMBER", altNum);
+				Log.v(LOGTAG, "Dial number from history: " + altNum);
 				CallUtils.dial(ctx,  altNum);
 			}
 		});
@@ -74,8 +107,8 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            	Log.v("CHECKED", ""+ id + ":" + isChecked);
-            	mDbHelper.setFave(id, isChecked);
+            	Log.v(LOGTAG, "Toggle favourite: " + itemId + ":" + isChecked);
+            	mDbHelper.setFave(itemId, isChecked);
             }
 
         });

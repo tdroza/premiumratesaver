@@ -134,12 +134,12 @@ public class LookupFragment extends Fragment implements OnClickListener, JSONLis
 		if (json != null) {
 			try {
 				JSONObject number = json.getJSONObject(Constants.ROOT_NODE);
-				String resultText = number.getString(Constants.ALT_NUMBER);
-				String desc = number.getString(Constants.DESCRIPTION);
+				String resultText = number.getString(Constants.ALT_NUMBER).trim();
+				String desc = number.getString(Constants.DESCRIPTION).trim();
 				result.setText(resultText);
 				description.setText(desc);
 				if (!query.getText().toString().equals(result.getText().toString())) {
-					mDbHelper.addHistory(number.getString(Constants.ORIG_NUMBER), resultText, desc);
+					mDbHelper.addHistory(number.getString(Constants.ORIG_NUMBER).trim(), resultText, desc);
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
 	
 					dial.setEnabled(true);
