@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Premium Rate Saver</string>
+    <string name="title_section_history">History</string>
+    <string name="title_section_lookup">Search</string>
+    <string name="title_fragment_lookup">Enter premium number:</string>
+    <string name="button_search">Search</string>
+    <string name="button_dial">Dial</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_history_deleteall">Delete all</string>
+    <string name="menu_history_show_faves">Show favourites</string>
+    <string name="pref_intercept_category">Numbers to intercept</string>
+    <string name="pref_global_category">Global</string>
+    <string name="no_history">Search history is empty</string>
+</resources>

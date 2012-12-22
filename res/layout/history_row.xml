@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+	
+	    <CheckBox android:id="@+id/history_fave" 
+	        android:button="@drawable/favourite_selector"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:checked="false"
+	        android:gravity="left"
+	        android:focusable="false"/>
+	    
+	    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+			android:orientation="vertical"
+			android:layout_weight="2"
+			android:clipToPadding="true">
+
+			<TextView android:id="@+id/history_description"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="6pt"
+			    android:textColor="@android:color/white"
+			    android:text="National Rail Enquiries"/>
+			<TextView android:id="@+id/history_orig_num"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="8pt"
+			    android:text="08457000000"/>
+			<TextView android:id="@+id/history_alt_num"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="10pt"
+			    android:textColor="@android:color/holo_blue_bright"
+			    android:text="0121000000"/>
+			<TextView android:id="@+id/history_timestamp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right"
+				android:textColor="@android:color/secondary_text_dark"
+				android:textStyle="italic"
+				android:text="12 December 2012"/>
+			
+		</LinearLayout>
+		
+		<Button android:id="@+id/history_call"
+		    android:background="@drawable/dial_selector"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center"
+		    android:gravity="right"
+		    android:focusable="false" />
+</LinearLayout>	    

@@ -1,0 +1,21 @@
+<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+	    <fragment android:name="net.droza.android.premiumratesaver.fragment.LookupFragment"
+	            android:id="@+id/lookup_fragment"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent" />
+	    <listfragment android:name="net.droza.android.premiumratesaver.fragment.HistoryFragment"
+	            android:id="@+id/history_fragment"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent" />
+	</LinearLayout>    
+ </android.support.v4.view.ViewPager>

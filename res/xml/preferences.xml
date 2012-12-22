@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_global_category">
+   		<CheckBoxPreference
+            android:key="Enable"
+            android:summary="Select number patterns to intercept below"
+            android:title="Intercept outgoing calls"
+            android:defaultValue="true" />
+   		<CheckBoxPreference
+            android:key="AutoDial"
+            android:summary="Autodial alternative numbers"
+            android:title="Automatically dial"
+            android:defaultValue="true" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/pref_intercept_category">
+		<CheckBoxPreference
+            android:key="Seven"
+            android:summary="Intercept numbers starting 087"
+            android:title="087x"
+            android:defaultValue="true" 
+            android:dependency="Enable" />
+		<CheckBoxPreference
+            android:key="Four"
+            android:summary="Intercept numbers starting 084"
+            android:title="084x"
+            android:defaultValue="true"
+             android:dependency="Enable" />
+		<CheckBoxPreference
+            android:key="Zero"
+            android:summary="Intercept numbers starting 080"
+            android:title="080x"
+            android:defaultValue="false"
+            android:dependency="Enable" />		
+	</PreferenceCategory>
+</PreferenceScreen>

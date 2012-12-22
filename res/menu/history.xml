@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/showFaves" android:title="@string/menu_history_show_faves" android:showAsAction="withText|ifRoom" android:icon="@drawable/ic_menu_star"></item>
+	<item android:id="@+id/deleteAll" android:title="@string/menu_history_deleteall" android:showAsAction="ifRoom" android:icon="@drawable/content_discard"></item>
+</menu>
