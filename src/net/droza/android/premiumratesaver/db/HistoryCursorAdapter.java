@@ -39,25 +39,10 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
         Cursor c = getCursor();
         final LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(layout, parent, false);
-        setTextFromDB(c, v, HistoryDBAdapter.KEY_HIST_DESCRIPTION, R.id.history_description);
-        setTextFromDB(c, v, HistoryDBAdapter.KEY_HIST_ORIG_NUM, R.id.history_orig_num);
-        setTextFromDB(c, v, HistoryDBAdapter.KEY_HIST_ALT_NUM, R.id.history_alt_num);
-        setTextFromDB(c, v, HistoryDBAdapter.KEY_HIST_SEARCH_DATE, R.id.history_timestamp);
-        
-        int fave = c.getInt(c.getColumnIndex(HistoryDBAdapter.KEY_HIST_FAVE));
-        CheckBox cbFave = (CheckBox) v.findViewById(R.id.history_fave);
-        cbFave.setChecked(fave > 0);
         return v;
+        
     }
 	
-	private void setTextFromDB(Cursor c, View v, String dbField, int id) {
-        String orig = c.getString(c.getColumnIndex(dbField));
-        TextView orig_text = (TextView) v.findViewById(id);
-        if (orig_text != null) {
-            orig_text.setText(orig);
-        }
-	}
-
 	@Override
     public void bindView(View view, Context context, Cursor cursor){
 		final int itemId = cursor.getInt(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID));
@@ -65,6 +50,15 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 		final String altNum = cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ALT_NUM));
 		final Context ctx = context;
 		final Cursor c = cursor;
+
+		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_DESCRIPTION, R.id.history_description);
+		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ORIG_NUM, R.id.history_orig_num);
+		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ALT_NUM, R.id.history_alt_num);
+		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_SEARCH_DATE, R.id.history_timestamp);
+		
+		int fave = c.getInt(c.getColumnIndex(HistoryDBAdapter.KEY_HIST_FAVE));
+		CheckBox cbFave = (CheckBox) view.findViewById(R.id.history_fave);
+		cbFave.setChecked(fave > 0);
 
 		view.setOnLongClickListener(new OnLongClickListener() {
 			
@@ -114,4 +108,11 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
         });
     }
 	
+	private void setTextFromDB(Cursor c, View v, String dbField, int id) {
+		String orig = c.getString(c.getColumnIndex(dbField));
+		TextView orig_text = (TextView) v.findViewById(id);
+		if (orig_text != null) {
+			orig_text.setText(orig);
+		}
+	}
 }
