@@ -22,7 +22,7 @@ public class HistoryDBAdapter {
     public static final String KEY_HIST_ID             = "_id";
     
 	private static final int DATABASE_VERSION = 1;
-	private static final String LOGTAG = "HistoryDB";
+	private static final String LOGTAG = HistoryDBAdapter.class.getSimpleName();
 	private DbHelper mDbHelper;
     private SQLiteDatabase mDb;
 	private final Context mCtx; 
@@ -132,10 +132,12 @@ public class HistoryDBAdapter {
     		whereClause += " AND favourite = 1";
     	}
     	
-        return mDb.query(HISTORY_TABLE, new String[] {
+        Cursor cur = mDb.query(HISTORY_TABLE, new String[] {
         		KEY_HIST_ID, KEY_HIST_ORIG_NUM, KEY_HIST_ALT_NUM, 
         		KEY_HIST_DESCRIPTION, KEY_HIST_SEARCH_DATE, KEY_HIST_FAVE},
         		whereClause, null, null, null, orderBy);
+        Log.v(LOGTAG, "" + cur.getCount());
+        return cur;
     }
     /**
      * Return a Cursor positioned at the task that matches the given rowId

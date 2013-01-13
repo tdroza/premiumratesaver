@@ -23,7 +23,7 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 	private HistoryDBAdapter mDbHelper;
 	private Context ctx;
 	private int layout;
-	private static final String LOGTAG = HistoryCursorAdapter.class.toString();
+	private static final String LOGTAG = HistoryCursorAdapter.class.getSimpleName();
 
 	public HistoryCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
@@ -45,9 +45,11 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 	
 	@Override
     public void bindView(View view, Context context, Cursor cursor){
+		
 		final int itemId = cursor.getInt(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID));
 		final String desc = cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_DESCRIPTION));
 		final String altNum = cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ALT_NUM));
+		int fave = cursor.getInt(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_FAVE));
 		final Context ctx = context;
 		final Cursor c = cursor;
 
@@ -55,9 +57,9 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ORIG_NUM, R.id.history_orig_num);
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ALT_NUM, R.id.history_alt_num);
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_SEARCH_DATE, R.id.history_timestamp);
-		
-		int fave = c.getInt(c.getColumnIndex(HistoryDBAdapter.KEY_HIST_FAVE));
+		Log.v(LOGTAG, desc + " " + fave);
 		CheckBox cbFave = (CheckBox) view.findViewById(R.id.history_fave);
+		cbFave.setOnCheckedChangeListener(null);
 		cbFave.setChecked(fave > 0);
 
 		view.setOnLongClickListener(new OnLongClickListener() {
@@ -96,8 +98,8 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 			}
 		});
 
-        CheckBox cb = (CheckBox)view.findViewById(R.id.history_fave);
-        cb.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+        //CheckBox cb = (CheckBox)view.findViewById(R.id.history_fave);
+        cbFave.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

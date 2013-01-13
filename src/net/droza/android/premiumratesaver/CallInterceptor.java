@@ -18,7 +18,8 @@ public class CallInterceptor extends BroadcastReceiver {
 		if (prefs.getBoolean(Constants.ENABLE_KEY, false) && (
 				(prefs.getBoolean(Constants.KEY_FOUR, false)  && origNumber.startsWith("084")) || 
 				(prefs.getBoolean(Constants.KEY_SEVEN, false) && origNumber.startsWith("087")) || 
-				(prefs.getBoolean(Constants.KEY_ZERO, false) && origNumber.startsWith("080")) )) {
+				(prefs.getBoolean(Constants.KEY_ZERO, false) && origNumber.startsWith("080"))  ||
+				(prefs.getBoolean(Constants.KEY_NINE, false) && origNumber.startsWith("09")) )) {
 			Toast.makeText(ctx, "Premium Rate number detected", Toast.LENGTH_LONG).show();
 			Intent i = new Intent();
 	        i.setClassName("net.droza.android.premiumratesaver", "net.droza.android.premiumratesaver.MainActivity");

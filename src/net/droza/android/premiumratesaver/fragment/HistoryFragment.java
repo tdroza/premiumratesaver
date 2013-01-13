@@ -28,7 +28,7 @@ import android.widget.Toast;
 public class HistoryFragment extends ListFragment {
 	private HistoryDBAdapter mDbHelper;
 	private boolean showFaves = false;
-	private static final String LOGTAG = HistoryFragment.class.toString();
+	private static final String LOGTAG = HistoryFragment.class.getSimpleName();
 
 	public HistoryFragment() {
 	}
@@ -97,14 +97,14 @@ public class HistoryFragment extends ListFragment {
 				HistoryDBAdapter.KEY_HIST_ALT_NUM,
 				HistoryDBAdapter.KEY_HIST_DESCRIPTION,
 				HistoryDBAdapter.KEY_HIST_SEARCH_DATE };
-		int[] to = new int[] { R.id.history_orig_num, R.id.history_alt_num,
-				R.id.history_description, R.id.history_timestamp };
+		int[] to = new int[] { R.id.history_orig_num, 
+				R.id.history_alt_num,
+				R.id.history_description, 
+				R.id.history_timestamp };
 
 		// Now create an array adapter and set it to display using our row
 		HistoryCursorAdapter history = new HistoryCursorAdapter(ctx,
 				R.layout.history_row, cursor, from, to);
 		setListAdapter(history);
 	}
-	
-		
 }
