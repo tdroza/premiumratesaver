@@ -31,5 +31,11 @@
             android:title="080x"
             android:defaultValue="false"
             android:dependency="Enable" />		
+		<CheckBoxPreference
+            android:key="Nine"
+            android:summary="Intercept numbers starting 09"
+            android:title="09x"
+            android:defaultValue="true"
+            android:dependency="Enable" />
 	</PreferenceCategory>
 </PreferenceScreen>
