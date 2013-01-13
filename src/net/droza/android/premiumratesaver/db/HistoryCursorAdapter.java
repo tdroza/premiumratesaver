@@ -57,8 +57,8 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ORIG_NUM, R.id.history_orig_num);
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ALT_NUM, R.id.history_alt_num);
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_SEARCH_DATE, R.id.history_timestamp);
-		Log.v(LOGTAG, desc + " " + fave);
-		CheckBox cbFave = (CheckBox) view.findViewById(R.id.history_fave);
+
+		final CheckBox cbFave = (CheckBox) view.findViewById(R.id.history_fave);
 		cbFave.setOnCheckedChangeListener(null);
 		cbFave.setChecked(fave > 0);
 
