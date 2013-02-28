@@ -3,29 +3,25 @@ package net.droza.android.premiumratesaver.fragment;
 import net.droza.android.premiumratesaver.R;
 import net.droza.android.premiumratesaver.db.HistoryCursorAdapter;
 import net.droza.android.premiumratesaver.db.HistoryDBAdapter;
-import android.app.AlertDialog;
-import android.app.ListFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * A fragment to display search history rows
  */
-public class HistoryFragment extends ListFragment {
+public class HistoryFragment extends SherlockListFragment {
 	private HistoryDBAdapter mDbHelper;
 	private boolean showFaves = false;
 	private static final String LOGTAG = HistoryFragment.class.getSimpleName();
