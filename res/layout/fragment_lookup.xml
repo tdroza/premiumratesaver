@@ -62,13 +62,15 @@
 					android:hint=""
 					android:layout_gravity="center_horizontal" />
 			</LinearLayout>	
+
 		    <Button
 		        android:id="@+id/dial_btn"
 		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
+		        android:layout_height="48dp"
 		        android:layout_gravity="center_horizontal"
-		        android:text="@string/button_dial" 
 		        android:background="#FF105010"
-		        android:enabled="false"/>
+		        android:enabled="false"
+		        android:text="@string/button_dial" />
+
 		</LinearLayout>
 </LinearLayout>
