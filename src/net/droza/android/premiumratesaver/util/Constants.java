@@ -12,4 +12,5 @@ public final class Constants {
 	public static final String KEY_NINE = "Nine";
 	public static final String KEY_AUTODIAL = "AutoDial";
 	public static String QUERY_TEXT = "query_text";
+	public static final String TAB_ID = "tab_id";
 }

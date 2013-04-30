@@ -2,6 +2,7 @@ package net.droza.android.premiumratesaver;
 
 import net.droza.android.premiumratesaver.fragment.HistoryFragment;
 import net.droza.android.premiumratesaver.fragment.LookupFragment;
+import net.droza.android.premiumratesaver.util.Constants;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ public class MainActivity extends SherlockFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
  
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
  
         actionBar.setDisplayShowTitleEnabled(false);
@@ -35,6 +36,10 @@ public class MainActivity extends SherlockFragmentActivity {
             .setTabListener(new CustomTabListener<HistoryFragment>(this, "History", HistoryFragment.class));
  
         actionBar.addTab(tab);
+        
+        if (savedInstanceState != null && savedInstanceState.containsKey(Constants.TAB_ID)) {
+        	actionBar.setSelectedNavigationItem(savedInstanceState.getInt(Constants.TAB_ID));
+        }
     }
     
     @Override
@@ -46,6 +51,15 @@ public class MainActivity extends SherlockFragmentActivity {
     }
     
     @Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		final ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			outState.putInt(Constants.TAB_ID, actionBar.getSelectedNavigationIndex());
+		}
+	}
+
+	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
         case R.id.menu_settings:

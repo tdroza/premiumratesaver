@@ -9,8 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockFragment;
  
 public class CustomTabListener<T extends Fragment> implements TabListener {
     private Fragment mFragment;
@@ -32,18 +30,22 @@ public class CustomTabListener<T extends Fragment> implements TabListener {
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction discard) {
 
-    	FragmentManager fragMgr = ((FragmentActivity)mActivity).getSupportFragmentManager();
-        FragmentTransaction ft = fragMgr.beginTransaction();
+    	final FragmentManager fragMgr = ((FragmentActivity)mActivity).getSupportFragmentManager();
+        final FragmentTransaction ft = fragMgr.beginTransaction();
+
+        final Fragment preInitializedFragment = fragMgr.findFragmentByTag(mTag);
 
         // Check if the fragment is already initialized
-        if (mFragment == null) {
-            // If not, instantiate and add it to the activity
-            mFragment = Fragment.instantiate(mActivity, mClass.getName());
-
+        if (mFragment == null && preInitializedFragment == null) {
+        	// If not, instantiate and add it to the activity
+            mFragment = (Fragment) Fragment.instantiate(mActivity, mClass.getName());
             ft.add(android.R.id.content, mFragment, mTag);
-        } else {
-            // If it exists, simply attach it in order to show it
+        } else if (mFragment != null) {
+        	// If it exists, simply attach it in order to show it
             ft.attach(mFragment);
+        }  else if (preInitializedFragment != null) {
+            ft.attach(preInitializedFragment);
+            mFragment = preInitializedFragment;
         }
         ft.commit();
     }
