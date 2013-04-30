@@ -1,5 +1,5 @@
  <selector xmlns:android="http://schemas.android.com/apk/res/android"
-     	   android:constantSize="true">
+     	   android:constantSize="false">
      <item android:state_pressed="true"
            android:drawable="@drawable/ic_audio_phone_selected" /> 
      <item android:drawable="@drawable/ic_audio_phone" /> 
