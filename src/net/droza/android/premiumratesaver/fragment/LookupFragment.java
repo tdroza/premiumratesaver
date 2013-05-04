@@ -1,5 +1,6 @@
 package net.droza.android.premiumratesaver.fragment;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import net.droza.android.premiumratesaver.CallUtils;
 import net.droza.android.premiumratesaver.R;
 import net.droza.android.premiumratesaver.db.HistoryDBAdapter;
@@ -10,12 +11,13 @@ import net.droza.android.premiumratesaver.util.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -37,7 +39,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
 public class LookupFragment extends SherlockFragment implements OnClickListener, JSONListener {
-	
 	EditText query;
 	TextView result;
 	ViewGroup resultFrame;
@@ -46,6 +47,7 @@ public class LookupFragment extends SherlockFragment implements OnClickListener,
 	Button dial;
 	private ProgressDialog dialog;
 	private HistoryDBAdapter mDbHelper;
+	private static Object clipboardService;
 	
 	private static final String LOGTAG = LookupFragment.class.toString();
 
@@ -60,6 +62,7 @@ public class LookupFragment extends SherlockFragment implements OnClickListener,
     	mDbHelper.open();
 
     	View view =  inflater.inflate(R.layout.fragment_lookup, container, false);
+    	clipboardService = view.getContext().getSystemService(CLIPBOARD_SERVICE);
     	
     	search = (Button) view.findViewById(R.id.search_btn);
     	search.setOnClickListener(this);
@@ -97,13 +100,21 @@ public class LookupFragment extends SherlockFragment implements OnClickListener,
     	resultFrame = (LinearLayout) view.findViewById(R.id.resultFrame);
     	resultFrame.setOnClickListener(new OnClickListener() {
 			
+			@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 			@Override
 			public void onClick(View v) {
 				Context ctx = v.getContext();
-				ClipboardManager clipboard = (ClipboardManager)
-				        ctx.getSystemService(Context.CLIPBOARD_SERVICE);
-				ClipData clip = ClipData.newPlainText("Alternative telephone number", result.getText());
-				clipboard.setPrimaryClip(clip);
+				
+				int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+				if (currentapiVersion >= android.os.Build.VERSION_CODES.HONEYCOMB){
+				     android.content.ClipboardManager clipboard =  (android.content.ClipboardManager) clipboardService; 
+				     ClipData clip = ClipData.newPlainText("Alternative telephone number", result.getText());
+				     clipboard.setPrimaryClip(clip);
+				} else{
+				    android.text.ClipboardManager clipboard = (android.text.ClipboardManager)clipboardService; 
+				    clipboard.setText(result.getText());
+				}
+				
 				Toast.makeText(ctx, "Copied to clipboard", Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -139,14 +150,15 @@ public class LookupFragment extends SherlockFragment implements OnClickListener,
 				result.setText(resultText);
 				description.setText(desc);
 				if (!query.getText().toString().equals(result.getText().toString())) {
+					// we found an alternative number
 					mDbHelper.addHistory(number.getString(Constants.ORIG_NUMBER).trim(), resultText, desc);
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
 	
-					dial.setEnabled(true);
 					if (prefs.getBoolean(Constants.KEY_AUTODIAL, false)) {
 						CallUtils.dial(getView().getContext(), resultText);
 					}
 				}
+				dial.setEnabled(true); // enable dial button even when no alt number found, so user can dial original
 			} catch (JSONException e) {
 				Log.e(LOGTAG, e.getMessage());
 				description.setText("Could not find alternative number");
