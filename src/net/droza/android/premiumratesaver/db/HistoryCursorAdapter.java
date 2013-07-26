@@ -1,11 +1,18 @@
 package net.droza.android.premiumratesaver.db;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import net.droza.android.premiumratesaver.CallUtils;
 import net.droza.android.premiumratesaver.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,7 +118,25 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
     }
 	
 	private void setTextFromDB(Cursor c, View v, String dbField, int id) {
+		
 		String orig = c.getString(c.getColumnIndex(dbField));
+		if (dbField == HistoryDBAdapter.KEY_HIST_SEARCH_DATE) {
+			java.text.DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	
+			try {
+				df.setTimeZone(TimeZone.getTimeZone("GMT"));	
+				Date origDate = df.parse(orig);
+				df.setTimeZone(TimeZone.getDefault());		
+				
+				//orig = df.getDateTimeInstance().format(origDate);
+				orig = DateUtils.getRelativeTimeSpanString(
+						origDate.getTime(), 
+						new Date().getTime(), 
+						DateUtils.SECOND_IN_MILLIS).toString();
+			} catch (ParseException e) {
+				// Swallow the exception to display the raw date
+				e.printStackTrace();
+			}
+		}
 		TextView orig_text = (TextView) v.findViewById(id);
 		if (orig_text != null) {
 			orig_text.setText(orig);
