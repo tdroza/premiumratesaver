@@ -146,7 +146,7 @@ public class HistoryDBAdapter {
      * @return Cursor positioned to matching task, if found
      * @throws SQLException if task could not be found/retrieved
      */
-    public Cursor fetchTask(long id) throws SQLException {
+    public Cursor fetchHistoryItem(long id) throws SQLException {
         Cursor mCursor =
 
                 mDb.query(true, HISTORY_TABLE, new String[] {

@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import de.timroes.swipetodismiss.SwipeDismissList;
+
 import net.droza.android.premiumratesaver.CallUtils;
 import net.droza.android.premiumratesaver.R;
 import android.app.AlertDialog;
@@ -19,10 +21,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -46,8 +50,8 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
         Cursor c = getCursor();
         final LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(layout, parent, false);
+
         return v;
-        
     }
 	
 	@Override
@@ -64,11 +68,13 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ORIG_NUM, R.id.history_orig_num);
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ALT_NUM, R.id.history_alt_num);
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_SEARCH_DATE, R.id.history_timestamp);
+		
+		view.setTag(cursor.getString(c.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID)));
 
 		final CheckBox cbFave = (CheckBox) view.findViewById(R.id.history_fave);
 		cbFave.setOnCheckedChangeListener(null);
 		cbFave.setChecked(fave > 0);
-
+/*
 		view.setOnLongClickListener(new OnLongClickListener() {
 			
 			@Override
@@ -95,6 +101,7 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 				return true;
 			}
 		});
+	*/	
         
         Button btn = (Button)view.findViewById(R.id.history_call);
         btn.setOnClickListener(new OnClickListener() {

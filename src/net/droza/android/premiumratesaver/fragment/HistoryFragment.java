@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,11 +19,16 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import de.timroes.swipetodismiss.SwipeDismissList;
+import de.timroes.swipetodismiss.SwipeDismissList.Undoable;
+
 /**
  * A fragment to display search history rows
  */
 public class HistoryFragment extends SherlockListFragment {
 	private HistoryDBAdapter mDbHelper;
+	
+	private SwipeDismissList mSwipeList;
 	private boolean showFaves = false;
 	private static final String LOGTAG = HistoryFragment.class.getSimpleName();
 
@@ -32,15 +38,51 @@ public class HistoryFragment extends SherlockListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedState) {
 		super.onActivityCreated(savedState);
+		
+		ListView listView = (ListView)getView().findViewById(android.R.id.list);
+		
+		mSwipeList = new SwipeDismissList(
+				listView,
+				new SwipeDismissList.OnDismissCallback() {
+					@Override
+					public SwipeDismissList.Undoable onDismiss(AbsListView listView, final int position) {
+						// Get the swiped item
+						//mDbHelper.
+						final String item = "TODO";
+						
+						// FIXME listView.getItemAtPosition(position).get
+						
+						Log.w("DELETE", "item " + position);
+						return new SwipeDismissList.Undoable() {
+							@Override
+							public String getTitle() {
+								return item + " deleted";
+							}
+							
+							@Override
+							public void undo() {
+								// Reinsert the item at its previous position.
+								//TODO: mAdapter.insert(item, position);
+								Log.w("Undo", "item " + item);
+							}
+							
+							// Delete from DB
+							@Override
+							public void discard() {
+								// Just write a log message (use logcat to see the effect)
+								Log.w("DISCARD", "item " + item + " now finally discarded");
+							}
+						};
+						
+					}
+					
+				});
 	}	
 	
 	@Override
 	public void onListItemClick(ListView list, View v, int position, long id) {
 		super.onListItemClick(list, v, position, id);
-
-		Toast.makeText(getActivity(), "Click. Pos:" + position + "; id:" + id,
-				Toast.LENGTH_SHORT).show();
-	}
+	}	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +93,7 @@ public class HistoryFragment extends SherlockListFragment {
 		mDbHelper.open();
 
 		View view = inflater.inflate(R.layout.history_list, container, false);
+
 		refreshHistory(inflater.getContext());
 
 		return view;
@@ -78,6 +121,13 @@ public class HistoryFragment extends SherlockListFragment {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		// Throw away all pending undos.
+		mSwipeList.discardUndo();
 	}
 
 	private void refreshHistory(Context ctx) {
