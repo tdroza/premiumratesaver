@@ -69,39 +69,9 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_ALT_NUM, R.id.history_alt_num);
 		setTextFromDB(c, view, HistoryDBAdapter.KEY_HIST_SEARCH_DATE, R.id.history_timestamp);
 		
-		view.setTag(cursor.getString(c.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID)));
-
 		final CheckBox cbFave = (CheckBox) view.findViewById(R.id.history_fave);
 		cbFave.setOnCheckedChangeListener(null);
 		cbFave.setChecked(fave > 0);
-/*
-		view.setOnLongClickListener(new OnLongClickListener() {
-			
-			@Override
-			public boolean onLongClick(View v) {
-				Log.v(LOGTAG, "Long Click! " + itemId);
-				AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-				builder.setMessage(desc + "\n" + altNum)
-			           .setTitle(R.string.confirm_delete_title);
-				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int buttonId) {
-			               Log.v(LOGTAG, "Deleting item from history: " + itemId);
-			               mDbHelper.deleteHistory(itemId);	
-			               c.requery();
-			               notifyDataSetChanged();
-			           }
-			       });
-				builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int buttonId) {
-			               Log.v(LOGTAG, "Negative");
-			           }
-			       });
-				AlertDialog dialog = builder.create();
-				dialog.show();
-				return true;
-			}
-		});
-	*/	
         
         Button btn = (Button)view.findViewById(R.id.history_call);
         btn.setOnClickListener(new OnClickListener() {
@@ -112,7 +82,6 @@ public class HistoryCursorAdapter extends SimpleCursorAdapter {
 			}
 		});
 
-        //CheckBox cb = (CheckBox)view.findViewById(R.id.history_fave);
         cbFave.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 
             @Override

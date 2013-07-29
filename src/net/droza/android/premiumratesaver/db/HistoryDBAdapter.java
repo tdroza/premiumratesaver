@@ -19,7 +19,12 @@ public class HistoryDBAdapter {
 	public static final String KEY_HIST_SEARCH_DATE    = "search_date";
     public static final String KEY_HIST_LAST_DIAL_DATE = "last_dial_date";
     public static final String KEY_HIST_FAVE 		   = "favourite";
+    public static final String KEY_HIST_STATE 		   = "state";
     public static final String KEY_HIST_ID             = "_id";
+    
+    public static final String STATE_NEW      = "new";
+    public static final String STATE_DELETING = "deleting";
+    public static final String STATE_DELETED  = "deleted";
     
 	private static final int DATABASE_VERSION = 1;
 	private static final String LOGTAG = HistoryDBAdapter.class.getSimpleName();
@@ -53,7 +58,7 @@ public class HistoryDBAdapter {
     }
     
     /**
-     * Open the task database. If it cannot be opened, try to create a new
+     * Open the history database. If it cannot be opened, try to create a new
      * instance of the database. If it cannot be created, throw an exception to
      * signal the failure
      * 
@@ -62,7 +67,10 @@ public class HistoryDBAdapter {
      * @throws SQLException if the database could be neither opened or created
      */
     public HistoryDBAdapter open() throws SQLException {
-        mDbHelper = new DbHelper(mCtx);
+        if (mDbHelper == null) {
+        	mDbHelper = new DbHelper(mCtx);
+        }
+        
         mDb = mDbHelper.getWritableDatabase();
         return this;
     }
@@ -94,8 +102,31 @@ public class HistoryDBAdapter {
      * @param id id of task to delete
      * @return true if deleted, false otherwise
      */
+    public boolean stageHistoryForDelete(long id) {
+    	ContentValues args = new ContentValues();
+        args.put(KEY_HIST_STATE, STATE_DELETING);
+
+        return mDb.update(HISTORY_TABLE, args, KEY_HIST_ID + "=" + id, null) > 0;
+    }
+    
+    /**
+     * Delete the task with the given rowId
+     * 
+     * @param id id of task to delete
+     * @return true if deleted, false otherwise
+     */
     public boolean deleteHistory(long id) {
-        return mDb.delete(HISTORY_TABLE, KEY_HIST_ID + "=" + id, null) > 0;
+    	ContentValues args = new ContentValues();
+        args.put(KEY_HIST_STATE, STATE_DELETED);
+
+        return mDb.update(HISTORY_TABLE, args, KEY_HIST_ID + "=" + id, null) > 0;
+    }
+    
+    public boolean undoDeleteHistory(long id) {
+    	ContentValues args = new ContentValues();
+        args.put(KEY_HIST_STATE, STATE_NEW);
+
+        return mDb.update(HISTORY_TABLE, args, KEY_HIST_ID + "=" + id, null) > 0;
     }
     
     public boolean setFave(long id, boolean fave) {
@@ -127,7 +158,7 @@ public class HistoryDBAdapter {
     		orderBy = orderKey + " " + orderDirection;
     	}
     	
-    	String whereClause = "state != 'deleted'";
+    	String whereClause = "state = 'new'";
     	if (showOnlyFaves) {
     		whereClause += " AND favourite = 1";
     	}
