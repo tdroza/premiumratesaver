@@ -3,7 +3,6 @@ package net.droza.android.premiumratesaver.fragment;
 import net.droza.android.premiumratesaver.R;
 import net.droza.android.premiumratesaver.db.HistoryCursorAdapter;
 import net.droza.android.premiumratesaver.db.HistoryDBAdapter;
-import android.app.LauncherActivity.ListItem;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
@@ -14,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -23,8 +20,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
-import de.timroes.swipetodismiss.SwipeDismissList.SwipeDirection;
-import de.timroes.swipetodismiss.SwipeDismissList.Undoable;
 
 /**
  * A fragment to display search history rows
