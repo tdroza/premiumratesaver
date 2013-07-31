@@ -3,8 +3,10 @@ package net.droza.android.premiumratesaver.fragment;
 import net.droza.android.premiumratesaver.R;
 import net.droza.android.premiumratesaver.db.HistoryCursorAdapter;
 import net.droza.android.premiumratesaver.db.HistoryDBAdapter;
+import android.app.LauncherActivity.ListItem;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -20,6 +23,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
+import de.timroes.swipetodismiss.SwipeDismissList.SwipeDirection;
 import de.timroes.swipetodismiss.SwipeDismissList.Undoable;
 
 /**
@@ -47,36 +51,40 @@ public class HistoryFragment extends SherlockListFragment {
 					@Override
 					public SwipeDismissList.Undoable onDismiss(AbsListView listView, final int position) {
 						// Get the swiped item
-						//mDbHelper.
-						final String item = "TODO";
+						final SQLiteCursor cursor = (SQLiteCursor)listView.getItemAtPosition(position);
+						Log.w("DELETE", "" + cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_DESCRIPTION)));
+
+						mDbHelper.stageHistoryForDelete(cursor.getLong(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID)));
+						refreshHistory(getView().getContext(), showFaves);	
 						
-						// FIXME listView.getItemAtPosition(position).get
-						
-						Log.w("DELETE", "item " + position);
 						return new SwipeDismissList.Undoable() {
 							@Override
 							public String getTitle() {
-								return item + " deleted";
+								return "Deleted " + cursor.getString(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_DESCRIPTION));
 							}
 							
 							@Override
 							public void undo() {
 								// Reinsert the item at its previous position.
-								//TODO: mAdapter.insert(item, position);
-								Log.w("Undo", "item " + item);
+								mDbHelper.undoDeleteHistory(cursor.getLong(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID)));
+								refreshHistory(getView().getContext(), showFaves);
+								Log.w("Undo", "" + cursor.getLong(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID)));
 							}
 							
 							// Delete from DB
 							@Override
 							public void discard() {
 								// Just write a log message (use logcat to see the effect)
-								Log.w("DISCARD", "item " + item + " now finally discarded");
+								Log.w("DISCARD", "item now finally discarded");
+								mDbHelper.deleteHistory(cursor.getLong(cursor.getColumnIndex(HistoryDBAdapter.KEY_HIST_ID)));
 							}
 						};
 						
 					}
 					
-				});
+				},
+				SwipeDismissList.UndoMode.SINGLE_UNDO);
+		mSwipeList.setAutoHideDelay(3000);
 	}	
 	
 	@Override
