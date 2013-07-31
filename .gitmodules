@@ -1,3 +1,6 @@
 [submodule "ActionBarSherlock"]
 	path = ActionBarSherlock
 	url = git@github.com:JakeWharton/ActionBarSherlock.git
+[submodule "SwipeToDismissUndoList"]
+	path = SwipeToDismissUndoList
+	url = https://github.com/timroes/SwipeToDismissUndoList
